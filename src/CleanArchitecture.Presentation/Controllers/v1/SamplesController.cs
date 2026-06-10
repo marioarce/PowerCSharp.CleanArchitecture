@@ -15,6 +15,13 @@ namespace CleanArchitecture.Presentation.Controllers.V1;
 /// The whole controller is gated behind the <c>Samples</c> feature flag, so it is hidden
 /// unless <c>PowerFeatures:Samples:Enabled</c> is true.
 /// </summary>
+/// <remarks>
+/// <para><b>Security note:</b> the feature flag only hides these endpoints; it is <b>not</b> an
+/// authorization mechanism. Some endpoints here (e.g. cache status and clear) expose or mutate
+/// shared server state and are unsafe to leave open. In a real application, guard such endpoints
+/// with proper authentication/authorization (e.g. <c>[Authorize]</c> with an admin policy),
+/// network restrictions, and/or rate limiting — do not rely on the flag alone.</para>
+/// </remarks>
 [ApiController]
 [Route("v1/samples")]
 [FeatureGate("Samples")]
@@ -44,6 +51,12 @@ public sealed class SamplesController : BaseApiController
     /// Shows the current contents of the sample cache (key count and the stored keys),
     /// demonstrating <c>ICacheService.GetKeys()</c>.
     /// </summary>
+    /// <remarks>
+    /// <para><b>Protect in production:</b> this leaks internal cache keys, which can reveal
+    /// implementation details, identifiers, or usage patterns. In a real application, restrict it
+    /// to administrators via authorization (e.g. <c>[Authorize(Policy = "Admin")]</c>) and consider
+    /// network/IP restrictions. The <c>Samples</c> feature flag is for hiding the demo, not for access control.</para>
+    /// </remarks>
     [HttpGet("cache/status")]
     [ProducesResponseType(typeof(ApiResponse<GetSampleCacheStatusResponse>), StatusCodes.Status200OK)]
     public Task<IActionResult> GetCacheStatusAsync()
@@ -52,6 +65,13 @@ public sealed class SamplesController : BaseApiController
     /// <summary>
     /// Clears the sample cache, demonstrating <c>ICacheService.Clear()</c>. Returns 204 No Content.
     /// </summary>
+    /// <remarks>
+    /// <para><b>Destructive — protect in production:</b> this wipes all cached entries and can cause a
+    /// cache-stampede / performance hit as data is rebuilt, and could be abused as a denial-of-service
+    /// vector if left open. In a real application, require authorization (e.g.
+    /// <c>[Authorize(Policy = "Admin")]</c>), and add rate limiting and audit logging. The <c>Samples</c>
+    /// feature flag only hides the demo; it does not authorize the caller.</para>
+    /// </remarks>
     [HttpDelete("cache")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     public Task<IActionResult> ClearCacheAsync()
