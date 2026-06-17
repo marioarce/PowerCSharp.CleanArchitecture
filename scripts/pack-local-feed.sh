@@ -12,6 +12,9 @@ SRC="${1:-$REPO_ROOT/../PowerCSharp}"
 FEED="$REPO_ROOT/local-feed"
 
 PROJECTS=(
+  "src/PowerCSharp.Core"
+  "src/PowerCSharp.Extensions"
+  "src/PowerCSharp.Helpers"
   "src/Features/PowerCSharp.Features.Abstractions"
   "src/Features/PowerCSharp.Features"
   "src/Features/PowerCSharp.BuiltInFeatures"
