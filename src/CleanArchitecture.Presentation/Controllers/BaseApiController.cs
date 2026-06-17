@@ -1,5 +1,5 @@
 using Ardalis.Result;
-using Ardalis.Result.AspNetCore;
+using CleanArchitecture.Presentation.Extensions;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -40,11 +40,21 @@ public abstract class BaseApiController : ControllerBase
 
     /// <summary>
     /// Sends a request through MediatR and maps the resulting <see cref="Result{T}"/>
-    /// to an <see cref="IActionResult"/>.
+    /// to an <see cref="IActionResult"/> wrapped in the consistent <c>ApiResponse</c> envelope.
     /// </summary>
-    protected async Task<ActionResult<TResponse>> SendAsync<TResponse>(IRequest<Result<TResponse>> request)
+    protected async Task<IActionResult> SendAsync<TResponse>(IRequest<Result<TResponse>> request)
     {
         var result = await Mediator.Send(request).ConfigureAwait(false);
-        return this.ToActionResult(result);
+        return result.ToApiActionResult();
+    }
+
+    /// <summary>
+    /// Sends a request whose handler returns a non-generic <see cref="Result"/> (e.g. commands with
+    /// no payload), mapping it to an <see cref="IActionResult"/> via the <c>ApiResponse</c> envelope.
+    /// </summary>
+    protected async Task<IActionResult> SendAsync(IRequest<Result> request)
+    {
+        var result = await Mediator.Send(request).ConfigureAwait(false);
+        return result.ToApiActionResult();
     }
 }
