@@ -6,6 +6,7 @@ using CleanArchitecture.WebApi.Features;
 using PowerCSharp.BuiltInFeatures;
 using PowerCSharp.Feature.Cache;
 using PowerCSharp.Feature.Cache.BitFaster;
+using PowerCSharp.Feature.Cache.Disk;
 using PowerCSharp.Features;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -35,7 +36,8 @@ builder.Services
         options.ScanAssemblies(typeof(CacheFeatureModule).Assembly); // Group 2 pluggable: Cache
         options.AddModule(new SamplesFeatureModule());              // Host-local: /v1/samples area
     })
-    .AddCacheBitFaster(builder.Configuration);                    // BitFaster provider (flag-gated)
+    .AddCacheBitFaster(builder.Configuration)                     // BitFaster provider (flag-gated)
+    .AddCacheDisk(builder.Configuration);                       // Disk cache provider (flag-gated) - temporarily disabled for debugging
 
 var app = builder.Build();
 

@@ -25,9 +25,10 @@ public static class DependencyInjection
 
         services.AddValidatorsFromAssembly(assembly);
 
-        // Factory contexts (the cache sample). Scoped so per-request collaborators flow in;
-        // ICacheService itself is supplied by the host's configured cache provider.
+        // Factory contexts (the cache samples). Scoped so per-request collaborators flow in;
+        // ICacheService/IDiskCacheService themselves are supplied by the host's configured cache providers.
         services.AddScoped<SampleCacheFactoryContext>();
+        services.AddScoped<SampleDiskCacheFactoryContext>();
 
         return services;
     }
