@@ -1,6 +1,4 @@
 using System.Diagnostics;
-using System.Linq;
-using PowerCSharp.Feature.Cache;
 using CleanArchitecture.Application.Api.Samples.Responses;
 using CleanArchitecture.Application.Api.Shared.Factories;
 using Microsoft.Extensions.Logging;
