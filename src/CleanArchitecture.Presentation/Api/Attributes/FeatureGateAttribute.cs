@@ -12,13 +12,21 @@ namespace CleanArchitecture.Presentation.Api.Attributes;
 [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = false)]
 public sealed class FeatureGateAttribute : Attribute, IAsyncActionFilter
 {
-    private readonly string _featureKey;
-
+    /// <summary>
+    /// Initializes a new instance of the FeatureGateAttribute.
+    /// </summary>
+    /// <param name="featureKey">The feature key to check.</param>
     public FeatureGateAttribute(string featureKey)
     {
         _featureKey = featureKey;
     }
 
+    /// <summary>
+    /// Executes the action filter to check if the feature is enabled.
+    /// </summary>
+    /// <param name="context">The action executing context.</param>
+    /// <param name="next">The next action delegate.</param>
+    /// <returns>A task representing the asynchronous operation.</returns>
     public async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
     {
         var flags = context.HttpContext.RequestServices.GetService<IFeatureFlagProvider>();
@@ -31,4 +39,7 @@ public sealed class FeatureGateAttribute : Attribute, IAsyncActionFilter
 
         await next().ConfigureAwait(false);
     }
+
+    // Private field (moved to end)
+    private readonly string _featureKey;
 }

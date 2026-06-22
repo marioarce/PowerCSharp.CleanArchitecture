@@ -10,8 +10,11 @@ namespace CleanArchitecture.Application.Api.Samples.Handlers;
 public sealed class ClearSampleCacheCommandHandler
     : BaseRequestHandler<ClearSampleCacheCommand, Result>
 {
-    private readonly SampleCacheFactoryContext _factoryContext;
-
+    /// <summary>
+    /// Initializes a new instance of the ClearSampleCacheCommandHandler.
+    /// </summary>
+    /// <param name="logger">The logger instance.</param>
+    /// <param name="factoryContext">The factory context.</param>
     public ClearSampleCacheCommandHandler(
         ILogger<ClearSampleCacheCommandHandler> logger,
         SampleCacheFactoryContext factoryContext)
@@ -21,10 +24,19 @@ public sealed class ClearSampleCacheCommandHandler
         ArgumentNullException.ThrowIfNull(_factoryContext);
     }
 
+    /// <summary>
+    /// Handles the ClearSampleCacheCommand by clearing the cache.
+    /// </summary>
+    /// <param name="request">The command to handle.</param>
+    /// <param name="cancellationToken">The cancellation token.</param>
+    /// <returns>A NoContent result.</returns>
     public override Task<Result> Handle(ClearSampleCacheCommand request, CancellationToken cancellationToken)
     {
         var factory = new SampleCacheFactory(_factoryContext);
         factory.Clear();
         return Task.FromResult(Result.NoContent());
     }
+
+    // Private field (moved to end)
+    private readonly SampleCacheFactoryContext _factoryContext;
 }

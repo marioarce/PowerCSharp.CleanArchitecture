@@ -11,8 +11,10 @@ namespace CleanArchitecture.Application.Api.Shared.Data.Samples;
 /// </summary>
 public sealed class SampleCacheFactory : BaseFactory<SampleCacheFactoryContext>
 {
-    private static readonly TimeSpan SimulatedWork = TimeSpan.FromMilliseconds(750);
-
+    /// <summary>
+    /// Initializes a new instance of the SampleCacheFactory.
+    /// </summary>
+    /// <param name="context">The factory context.</param>
     public SampleCacheFactory(SampleCacheFactoryContext context)
         : base(context)
     {
@@ -72,4 +74,7 @@ public sealed class SampleCacheFactory : BaseFactory<SampleCacheFactoryContext>
         Context.Logger.LogInformation("Cleared sample cache ({ClearedKeys} keys removed)", clearedKeys);
         return clearedKeys;
     }
+
+    // Private field (moved to end)
+    private static readonly TimeSpan SimulatedWork = TimeSpan.FromMilliseconds(750);
 }

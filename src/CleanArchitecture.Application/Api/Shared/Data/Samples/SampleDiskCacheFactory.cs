@@ -11,8 +11,10 @@ namespace CleanArchitecture.Application.Api.Shared.Data.Samples;
 /// </summary>
 public sealed class SampleDiskCacheFactory : BaseFactory<SampleDiskCacheFactoryContext>
 {
-    private static readonly TimeSpan SimulatedWork = TimeSpan.FromMilliseconds(750);
-
+    /// <summary>
+    /// Initializes a new instance of the SampleDiskCacheFactory.
+    /// </summary>
+    /// <param name="context">The factory context.</param>
     public SampleDiskCacheFactory(SampleDiskCacheFactoryContext context)
         : base(context)
     {
@@ -82,4 +84,7 @@ public sealed class SampleDiskCacheFactory : BaseFactory<SampleDiskCacheFactoryC
         Context.Logger.LogInformation("Cleared disk cache ({ClearedKeys} keys removed)", clearedKeys);
         return clearedKeys;
     }
+
+    // Private field (moved to end)
+    private static readonly TimeSpan SimulatedWork = TimeSpan.FromMilliseconds(750);
 }

@@ -11,13 +11,22 @@ namespace CleanArchitecture.Application.Common.Behaviors;
 public sealed class LoggingBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
     where TRequest : notnull
 {
-    private readonly ILogger<LoggingBehavior<TRequest, TResponse>> _logger;
-
+    /// <summary>
+    /// Initializes a new instance of the LoggingBehavior.
+    /// </summary>
+    /// <param name="logger">The logger instance.</param>
     public LoggingBehavior(ILogger<LoggingBehavior<TRequest, TResponse>> logger)
     {
         _logger = logger;
     }
 
+    /// <summary>
+    /// Handles the request by logging start/end and measuring execution time.
+    /// </summary>
+    /// <param name="request">The request to handle.</param>
+    /// <param name="next">The next delegate in the pipeline.</param>
+    /// <param name="cancellationToken">The cancellation token.</param>
+    /// <returns>The response from the next handler.</returns>
     public async Task<TResponse> Handle(
         TRequest request,
         RequestHandlerDelegate<TResponse> next,
@@ -40,4 +49,7 @@ public sealed class LoggingBehavior<TRequest, TResponse> : IPipelineBehavior<TRe
 
         return response;
     }
+
+    // Private field (moved to end)
+    private readonly ILogger<LoggingBehavior<TRequest, TResponse>> _logger;
 }

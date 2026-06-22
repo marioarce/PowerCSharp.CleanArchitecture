@@ -11,8 +11,11 @@ namespace CleanArchitecture.Application.Api.Samples.Handlers;
 public sealed class GetSampleCacheStatusQueryHandler
     : BaseRequestHandler<GetSampleCacheStatusQuery, Result<GetSampleCacheStatusResponse>>
 {
-    private readonly SampleCacheFactoryContext _factoryContext;
-
+    /// <summary>
+    /// Initializes a new instance of the GetSampleCacheStatusQueryHandler.
+    /// </summary>
+    /// <param name="logger">The logger instance.</param>
+    /// <param name="factoryContext">The factory context.</param>
     public GetSampleCacheStatusQueryHandler(
         ILogger<GetSampleCacheStatusQueryHandler> logger,
         SampleCacheFactoryContext factoryContext)
@@ -22,6 +25,12 @@ public sealed class GetSampleCacheStatusQueryHandler
         ArgumentNullException.ThrowIfNull(_factoryContext);
     }
 
+    /// <summary>
+    /// Handles the GetSampleCacheStatusQuery by retrieving cache status.
+    /// </summary>
+    /// <param name="request">The query to handle.</param>
+    /// <param name="cancellationToken">The cancellation token.</param>
+    /// <returns>A result with the cache status.</returns>
     public override Task<Result<GetSampleCacheStatusResponse>> Handle(
         GetSampleCacheStatusQuery request,
         CancellationToken cancellationToken)
@@ -30,4 +39,7 @@ public sealed class GetSampleCacheStatusQueryHandler
         var status = factory.GetStatus();
         return Task.FromResult(Result.Success(status));
     }
+
+    // Private field (moved to end)
+    private readonly SampleCacheFactoryContext _factoryContext;
 }

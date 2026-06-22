@@ -16,9 +16,12 @@ namespace CleanArchitecture.Application.Api.Samples.Handlers;
 public sealed class GetSampleCacheQueryHandler
     : BaseRequestHandler<GetSampleCacheQuery, Result<GetSampleCacheResponse>>
 {
-    private readonly IValidator<GetSampleCacheQuery> _validator;
-    private readonly SampleCacheFactoryContext _factoryContext;
-
+    /// <summary>
+    /// Initializes a new instance of the GetSampleCacheQueryHandler.
+    /// </summary>
+    /// <param name="logger">The logger instance.</param>
+    /// <param name="validator">The validator instance.</param>
+    /// <param name="factoryContext">The factory context.</param>
     public GetSampleCacheQueryHandler(
         ILogger<GetSampleCacheQueryHandler> logger,
         IValidator<GetSampleCacheQuery> validator,
@@ -32,6 +35,12 @@ public sealed class GetSampleCacheQueryHandler
         ArgumentNullException.ThrowIfNull(_factoryContext);
     }
 
+    /// <summary>
+    /// Handles the GetSampleCacheQuery by validating input and retrieving cache data.
+    /// </summary>
+    /// <param name="request">The query to handle.</param>
+    /// <param name="cancellationToken">The cancellation token.</param>
+    /// <returns>A result with the cache response.</returns>
     public override async Task<Result<GetSampleCacheResponse>> Handle(
         GetSampleCacheQuery request,
         CancellationToken cancellationToken)
@@ -52,4 +61,8 @@ public sealed class GetSampleCacheQueryHandler
 
         return Result.Success(response);
     }
+
+    // Private fields (moved to end)
+    private readonly IValidator<GetSampleCacheQuery> _validator;
+    private readonly SampleCacheFactoryContext _factoryContext;
 }
