@@ -16,9 +16,12 @@ namespace CleanArchitecture.Presentation.Controllers;
 [Route("[controller]")]
 public abstract class BaseApiController : ControllerBase
 {
-    private readonly IHttpContextAccessor _httpContextAccessor;
-    private readonly ILogger _logger;
-
+    /// <summary>
+    /// Initializes a new instance of the BaseApiController.
+    /// </summary>
+    /// <param name="mediator">The MediatR mediator.</param>
+    /// <param name="httpContextAccessor">The HTTP context accessor.</param>
+    /// <param name="logger">The logger instance.</param>
     protected BaseApiController(IMediator mediator, IHttpContextAccessor httpContextAccessor, ILogger logger)
     {
         Mediator = mediator;
@@ -57,4 +60,8 @@ public abstract class BaseApiController : ControllerBase
         var result = await Mediator.Send(request).ConfigureAwait(false);
         return result.ToApiActionResult();
     }
+
+    // Private fields (moved to end)
+    private readonly IHttpContextAccessor _httpContextAccessor;
+    private readonly ILogger _logger;
 }

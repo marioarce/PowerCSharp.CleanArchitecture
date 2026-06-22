@@ -9,8 +9,10 @@ namespace CleanArchitecture.WebApi.IntegrationTests.Samples;
 /// </summary>
 public sealed class SamplesCacheEndpointTests : IClassFixture<SamplesApiFactory>
 {
-    private readonly SamplesApiFactory _factory;
-
+    /// <summary>
+    /// Initializes a new instance of the SamplesCacheEndpointTests.
+    /// </summary>
+    /// <param name="factory">The API factory.</param>
     public SamplesCacheEndpointTests(SamplesApiFactory factory) => _factory = factory;
 
     [Fact]
@@ -62,6 +64,9 @@ public sealed class SamplesCacheEndpointTests : IClassFixture<SamplesApiFactory>
 
         Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
     }
+
+    // Private fields and methods (moved to end)
+    private readonly SamplesApiFactory _factory;
 
     private static async Task<SampleData> GetSampleAsync(HttpClient client, string key)
     {

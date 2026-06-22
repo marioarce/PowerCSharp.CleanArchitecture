@@ -13,8 +13,11 @@ namespace CleanArchitecture.Application.Api.Samples.Handlers;
 public sealed class ClearSampleDiskCacheCommandHandler
     : BaseRequestHandler<ClearSampleDiskCacheCommand, Result<int>>
 {
-    private readonly SampleDiskCacheFactoryContext _factoryContext;
-
+    /// <summary>
+    /// Initializes a new instance of the ClearSampleDiskCacheCommandHandler.
+    /// </summary>
+    /// <param name="logger">The logger instance.</param>
+    /// <param name="factoryContext">The factory context.</param>
     public ClearSampleDiskCacheCommandHandler(
         ILogger<ClearSampleDiskCacheCommandHandler> logger,
         SampleDiskCacheFactoryContext factoryContext)
@@ -24,6 +27,12 @@ public sealed class ClearSampleDiskCacheCommandHandler
         ArgumentNullException.ThrowIfNull(_factoryContext);
     }
 
+    /// <summary>
+    /// Handles the ClearSampleDiskCacheCommand by clearing the disk cache.
+    /// </summary>
+    /// <param name="request">The command to handle.</param>
+    /// <param name="cancellationToken">The cancellation token.</param>
+    /// <returns>A result with the number of cleared keys.</returns>
     public override async Task<Result<int>> Handle(
         ClearSampleDiskCacheCommand request,
         CancellationToken cancellationToken)
@@ -35,4 +44,7 @@ public sealed class ClearSampleDiskCacheCommandHandler
 
         return Result.Success(clearedKeys);
     }
+
+    // Private field (moved to end)
+    private readonly SampleDiskCacheFactoryContext _factoryContext;
 }
