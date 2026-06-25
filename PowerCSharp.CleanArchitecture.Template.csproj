@@ -13,7 +13,6 @@
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageTags>dotnet-new;template;clean-architecture;webapi;powercsharp;csharp;mediatr;cqrs</PackageTags>
     <PackageReadmeFile>README.md</PackageReadmeFile>
-    <PackageIcon>icon.png</PackageIcon>
     <!-- Template pack settings -->
     <TargetFramework>netstandard2.0</TargetFramework>
     <IncludeContentInPack>true</IncludeContentInPack>
@@ -22,6 +21,10 @@
     <NoDefaultExcludes>true</NoDefaultExcludes>
     <SuppressDependenciesWhenPacking>true</SuppressDependenciesWhenPacking>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="**\*.cs" />
+  </ItemGroup>
 
   <ItemGroup>
     <Content Include=".template.config/**" />
