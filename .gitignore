@@ -16,6 +16,7 @@
 
 # Mono auto generated files
 mono_crash.*
+.mono/
 
 # Build results
 [Dd]ebug/
@@ -427,3 +428,16 @@ FodyWeavers.xsd
 *.msix
 *.msm
 *.msp
+
+# macOS metadata files
+.DS_Store
+**/.DS_Store
+
+# PowerCSharp disk-cache runtime directory
+cache/
+
+# Local scratch folder (not part of the template)
+debug-test/
+
+# Local NuGet feed (development only, packages are available on nuget.org)
+local-feed/

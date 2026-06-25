@@ -1,0 +1,67 @@
+using Ardalis.Result;
+using CleanArchitecture.Presentation.Extensions;
+using MediatR;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
+
+namespace CleanArchitecture.Presentation.Controllers;
+
+/// <summary>
+/// Base controller that dispatches requests through MediatR and converts an
+/// <see cref="Ardalis.Result.Result{T}"/> into an appropriate HTTP response.
+/// Derive feature controllers from this type.
+/// </summary>
+[ApiController]
+[Route("[controller]")]
+public abstract class BaseApiController : ControllerBase
+{
+    /// <summary>
+    /// Initializes a new instance of the BaseApiController.
+    /// </summary>
+    /// <param name="mediator">The MediatR mediator.</param>
+    /// <param name="httpContextAccessor">The HTTP context accessor.</param>
+    /// <param name="logger">The logger instance.</param>
+    protected BaseApiController(IMediator mediator, IHttpContextAccessor httpContextAccessor, ILogger logger)
+    {
+        Mediator = mediator;
+        _httpContextAccessor = httpContextAccessor;
+        _logger = logger;
+
+        var request = _httpContextAccessor.HttpContext?.Request;
+        _logger.LogInformation(
+            "Init controller {ControllerType} for {Method} {Path}",
+            GetType().FullName,
+            request?.Method,
+            request?.Path.Value);
+    }
+
+    /// <summary>
+    /// Gets the MediatR mediator used to dispatch requests.
+    /// </summary>
+    protected IMediator Mediator { get; }
+
+    /// <summary>
+    /// Sends a request through MediatR and maps the resulting <see cref="Result{T}"/>
+    /// to an <see cref="IActionResult"/> wrapped in the consistent <c>ApiResponse</c> envelope.
+    /// </summary>
+    protected async Task<IActionResult> SendAsync<TResponse>(IRequest<Result<TResponse>> request)
+    {
+        var result = await Mediator.Send(request).ConfigureAwait(false);
+        return result.ToApiActionResult();
+    }
+
+    /// <summary>
+    /// Sends a request whose handler returns a non-generic <see cref="Result"/> (e.g. commands with
+    /// no payload), mapping it to an <see cref="IActionResult"/> via the <c>ApiResponse</c> envelope.
+    /// </summary>
+    protected async Task<IActionResult> SendAsync(IRequest<Result> request)
+    {
+        var result = await Mediator.Send(request).ConfigureAwait(false);
+        return result.ToApiActionResult();
+    }
+
+    // Private fields (moved to end)
+    private readonly IHttpContextAccessor _httpContextAccessor;
+    private readonly ILogger _logger;
+}
