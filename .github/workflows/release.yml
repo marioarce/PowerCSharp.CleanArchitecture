@@ -22,13 +22,13 @@ jobs:
           dotnet-version: '8.0.x'
 
       - name: Restore dependencies
-        run: dotnet restore
+        run: dotnet restore PowerCSharp.CleanArchitecture.sln
 
       - name: Build
-        run: dotnet build --no-restore -c Release
+        run: dotnet build PowerCSharp.CleanArchitecture.sln --no-restore -c Release
 
       - name: Test
-        run: dotnet test --no-build -c Release --verbosity normal
+        run: dotnet test PowerCSharp.CleanArchitecture.sln --no-build -c Release --verbosity normal
 
       - name: Extract version from tag
         id: version
